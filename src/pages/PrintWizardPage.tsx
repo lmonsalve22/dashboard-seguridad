@@ -100,6 +100,16 @@ const PrintWizardContent: React.FC = () => {
         }, 500); // Increased delay slightly to ensure layout stability
     }, [settings.orientation, PIXELS_PER_MM, currentPage?.id, updateSettings, settings.scale]); // Added settings.scale read for calculation (but logic prevents loop via delta check)
 
+    // fitContentToPage es un useCallback con debounce, asi que no tiene un
+    // ciclo de vida propio donde cancelar su timer. Este effect se encarga de
+    // que un desmontaje no deje pendiente un setTimeout que luego toca refs y
+    // estado ya inexistentes.
+    React.useEffect(() => () => {
+        if (fitTimeoutRef.current) {
+            clearTimeout(fitTimeoutRef.current);
+        }
+    }, []);
+
     const handleFit = React.useCallback((mode: 'width' | 'height') => {
         if (!containerRef.current) return;
 
