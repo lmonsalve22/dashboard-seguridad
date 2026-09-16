@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# --- Higiene basica: dependencias, artefactos de build y secretos ---
+.env
+.env.local
+.env.*.local
